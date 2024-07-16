@@ -20,7 +20,7 @@
             margin-bottom: 30px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
-        select, button {
+        select, button, input {
             margin: 10px 0;
             padding: 10px;
             font-size: 16px;
@@ -28,7 +28,7 @@
             border: none;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        select {
+        select, input[type="text"], input[type="number"] {
             width: 100%;
             background-color: #ffffff;
         }
@@ -37,6 +37,7 @@
             color: white;
             cursor: pointer;
             transition: background-color 0.3s;
+            margin-right: 10px;
         }
         button:hover {
             background-color: #45a049;
@@ -73,10 +74,23 @@
             font-style: italic;
             color: #666;
         }
+        @media print {
+            body {
+                background-color: white;
+            }
+            button {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
     <h1>Mental Health Questionnaires</h1>
+    <div id="patientInfo">
+        <input type="text" id="patientName" placeholder="Patient Name">
+        <input type="number" id="patientAge" placeholder="Patient Age">
+        <div id="currentDate"></div>
+    </div>
     <select id="questionnaireSelect">
         <option value="">Select a questionnaire</option>
         <option value="phq9">PHQ-9 (Depression)</option>
@@ -85,6 +99,12 @@
     <div id="questionnaireContainer"></div>
     <button id="submitBtn" style="display:none;">Submit</button>
     <div id="result"></div>
+    <button id="printBtn">Print</button>
+    <button id="clearBtn">Clear Form</button>
+
+    <footer>
+        DEVELOPED BY Dr. Archit K. Mehta
+    </footer>
 
     <script>
         const phq9Questions = [
@@ -179,10 +199,22 @@
             }
             document.getElementById('result').textContent = `Score: ${score}. Interpretation: ${interpretation}`;
         });
-    </script>
 
-    <footer>
-        DEVELOPED BY Dr. Archit K. Mehta
-    </footer>
+        document.getElementById('printBtn').addEventListener('click', function() {
+            const currentDate = new Date().toLocaleDateString();
+            document.getElementById('currentDate').textContent = `Date: ${currentDate}`;
+            window.print();
+        });
+
+        document.getElementById('clearBtn').addEventListener('click', function() {
+            document.getElementById('patientName').value = '';
+            document.getElementById('patientAge').value = '';
+            document.getElementById('questionnaireSelect').selectedIndex = 0;
+            document.getElementById('questionnaireContainer').innerHTML = '';
+            document.getElementById('result').textContent = '';
+            document.getElementById('submitBtn').style.display = 'none';
+            document.getElementById('currentDate').textContent = '';
+        });
+    </script>
 </body>
 </html>
