@@ -3,218 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mental Health Questionnaires</title>
+    <title>MENTAL HEALTH ASSESSMENT TOOLS</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f0f8ff;
+            background-image: url('https://images.unsplash.com/photo-1517021897933-0e0319cfbc28?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-attachment: fixed;
             color: #333;
             line-height: 1.6;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            flex-grow: 1;
         }
         h1 {
-            color: #4a4a4a;
+            color: #3498db;
             text-align: center;
+            font-size: 2.5em;
             margin-bottom: 30px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
-        select, button, input {
-            margin: 10px 0;
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: none;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        select, input[type="text"], input[type="number"] {
-            width: 100%;
-            background-color: #ffffff;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            margin-right: 10px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .question {
-            background-color: #ffffff;
-            margin-bottom: 15px;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .question p {
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        input[type="radio"] {
-            margin-right: 5px;
-        }
-        label {
-            margin-right: 15px;
-        }
-        #result {
+        .form-selector {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
             margin-top: 20px;
-            font-weight: bold;
+        }
+        .form-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 15px 25px;
             text-align: center;
-            padding: 15px;
-            background-color: #e6f7ff;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .form-button:hover {
+            background-color: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        #formContainer {
+            margin-top: 30px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         footer {
-            margin-top: 30px;
             text-align: center;
-            font-style: italic;
-            color: #666;
-        }
-        @media print {
-            body {
-                background-color: white;
-            }
-            button {
-                display: none;
-            }
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 0.9em;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
         }
     </style>
 </head>
 <body>
-    <h1>Mental Health Questionnaires</h1>
-    <div id="patientInfo">
-        <input type="text" id="patientName" placeholder="Patient Name">
-        <input type="number" id="patientAge" placeholder="Patient Age">
-        <div id="currentDate"></div>
+    <div class="container">
+        <h1>MENTAL HEALTH ASSESSMENT TOOLS</h1>
+        <div class="form-selector">
+            <button class="form-button" onclick="loadForm('230532294251045')">FOR ANXIETY</button>
+            <button class="form-button" onclick="loadForm('230524897086061')">FOR DEPRESSION (PHQ 9)</button>
+            <button class="form-button" onclick="loadForm('232132933070042')">MATERNAL MENTAL HEALTH ASSESSMENT</button>
+            <button class="form-button" onclick="loadForm('233100533503035')">BECK'S DEPRESSION INVENTORY</button>
+        </div>
+        <div id="formContainer"></div>
     </div>
-    <select id="questionnaireSelect">
-        <option value="">Select a questionnaire</option>
-        <option value="phq9">PHQ-9 (Depression)</option>
-        <option value="gad7">GAD-7 (Anxiety)</option>
-    </select>
-    <div id="questionnaireContainer"></div>
-    <button id="submitBtn" style="display:none;">Submit</button>
-    <div id="result"></div>
-    <button id="printBtn">Print</button>
-    <button id="clearBtn">Clear Form</button>
 
     <footer>
-        DEVELOPED BY Dr. Archit K. Mehta
+        Created by Dr. Archit Mehta for personal clinical use. Your data will remain confidential.
     </footer>
 
+    <script src="https://form.jotform.com/static/feedback2.js"></script>
     <script>
-        const phq9Questions = [
-            "Little interest or pleasure in doing things",
-            "Feeling down, depressed, or hopeless",
-            "Trouble falling or staying asleep, or sleeping too much",
-            "Feeling tired or having little energy",
-            "Poor appetite or overeating",
-            "Feeling bad about yourself or that you are a failure or have let yourself or your family down",
-            "Trouble concentrating on things, such as reading the newspaper or watching television",
-            "Moving or speaking so slowly that other people could have noticed. Or the opposite being so fidgety or restless that you have been moving around a lot more than usual",
-            "Thoughts that you would be better off dead, or of hurting yourself"
-        ];
-
-        const gad7Questions = [
-            "Feeling nervous, anxious, or on edge",
-            "Not being able to stop or control worrying",
-            "Worrying too much about different things",
-            "Trouble relaxing",
-            "Being so restless that it is hard to sit still",
-            "Becoming easily annoyed or irritable",
-            "Feeling afraid, as if something awful might happen"
-        ];
-
-        const options = ["Not at all", "Several days", "More than half the days", "Nearly every day"];
-
-        function createQuestionnaire(questions) {
-            const container = document.getElementById('questionnaireContainer');
-            container.innerHTML = '';
-            questions.forEach((q, index) => {
-                const questionDiv = document.createElement('div');
-                questionDiv.className = 'question';
-                questionDiv.innerHTML = `
-                    <p>${index + 1}. ${q}</p>
-                    ${options.map((option, i) => `
-                        <input type="radio" name="q${index}" value="${i}" id="q${index}o${i}">
-                        <label for="q${index}o${i}">${option}</label>
-                    `).join('')}
-                `;
-                container.appendChild(questionDiv);
-            });
-            document.getElementById('submitBtn').style.display = 'block';
+        function loadForm(formId) {
+            const container = document.getElementById('formContainer');
+            container.innerHTML = ''; // Clear previous form
+            
+            new JotformFeedback({
+                formId: formId,
+                base: "https://form.jotform.com/",
+                windowTitle: "Mental Health Assessment",
+                background: "#3498db",
+                fontColor: "#FFFFFF",
+                type: false,
+                height: 500,
+                width: 700,
+                openOnLoad: true
+            }).createIframe();
+            
+            container.style.height = '500px';
         }
-
-        function calculateScore() {
-            const questions = document.querySelectorAll('.question');
-            let total = 0;
-            questions.forEach(q => {
-                const selected = q.querySelector('input:checked');
-                if (selected) {
-                    total += parseInt(selected.value);
-                }
-            });
-            return total;
-        }
-
-        function interpretPHQ9(score) {
-            if (score >= 20) return "Severe depression";
-            if (score >= 15) return "Moderately severe depression";
-            if (score >= 10) return "Moderate depression";
-            if (score >= 5) return "Mild depression";
-            return "Minimal depression";
-        }
-
-        function interpretGAD7(score) {
-            if (score >= 15) return "Severe anxiety";
-            if (score >= 10) return "Moderate anxiety";
-            if (score >= 5) return "Mild anxiety";
-            return "Minimal anxiety";
-        }
-
-        document.getElementById('questionnaireSelect').addEventListener('change', function() {
-            const selected = this.value;
-            if (selected === 'phq9') {
-                createQuestionnaire(phq9Questions);
-            } else if (selected === 'gad7') {
-                createQuestionnaire(gad7Questions);
-            } else {
-                document.getElementById('questionnaireContainer').innerHTML = '';
-                document.getElementById('submitBtn').style.display = 'none';
-            }
-        });
-
-        document.getElementById('submitBtn').addEventListener('click', function() {
-            const score = calculateScore();
-            const selected = document.getElementById('questionnaireSelect').value;
-            let interpretation = '';
-            if (selected === 'phq9') {
-                interpretation = interpretPHQ9(score);
-            } else if (selected === 'gad7') {
-                interpretation = interpretGAD7(score);
-            }
-            document.getElementById('result').textContent = `Score: ${score}. Interpretation: ${interpretation}`;
-        });
-
-        document.getElementById('printBtn').addEventListener('click', function() {
-            const currentDate = new Date().toLocaleDateString();
-            document.getElementById('currentDate').textContent = `Date: ${currentDate}`;
-            window.print();
-        });
-
-        document.getElementById('clearBtn').addEventListener('click', function() {
-            document.getElementById('patientName').value = '';
-            document.getElementById('patientAge').value = '';
-            document.getElementById('questionnaireSelect').selectedIndex = 0;
-            document.getElementById('questionnaireContainer').innerHTML = '';
-            document.getElementById('result').textContent = '';
-            document.getElementById('submitBtn').style.display = 'none';
-            document.getElementById('currentDate').textContent = '';
-        });
     </script>
 </body>
 </html>
